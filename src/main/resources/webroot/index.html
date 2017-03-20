@@ -1,15 +1,13 @@
 <html>
 <head>
     <title></title>
-    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
-    <script src="//cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
-    <script src="vertx-eventbus.js"></script>
+
 </head>
 
 <style>
-  .news {
-    font-size: 20pt;
-  }
+    .news {
+        font-size: 20pt;
+    }
 
 </style>
 
@@ -20,13 +18,19 @@
 
 <div id="status" class="news"></div>
 
-<script>
-  var sock = new SockJS('http://localhost:8080/news-feed');
-  sock.onmessage = function(e) {
-    var str = "<code>" + e.data + "</code><br>";
-    $('#status').prepend(str);
-  };
+<script src="/assets/jquery/jquery.min.js"></script>
+<script src="/assets/sockjs/sockjs.min.js"></script>
+<script src="/assets/vertx3-eventbus-client/vertx-eventbus.js"></script>
 
+<script>
+    var eb = new EventBus('/feed');
+
+    eb.onopen = function () {
+        eb.registerHandler('some-address', function (error, message) {
+            console.log('received a message: ' + JSON.stringify(message));
+        });
+        eb.publish('some-address', {name: 'tim', age: 587});
+    }
 </script>
 
 </body>
