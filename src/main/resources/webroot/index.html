@@ -23,13 +23,21 @@
 <script src="/assets/vertx3-eventbus-client/vertx-eventbus.js"></script>
 
 <script>
+
+    function makeUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (a, b) {
+            return b = Math.random() * 16, (a == 'y' ? b & 3 | 8 : b | 0).toString(16);
+        });
+    }
+
     var eb = new EventBus('/feed');
 
     eb.onopen = function () {
-        eb.registerHandler('some-address', function (error, message) {
+        eb.registerHandler("feed." + makeUUID(), {query: "vertx"}, function (error, message) {
             console.log('received a message: ' + JSON.stringify(message));
+            console.log('received an error: ' + JSON.stringify(error));
         });
-        eb.publish('some-address', {name: 'tim', age: 587});
+
     }
 </script>
 
