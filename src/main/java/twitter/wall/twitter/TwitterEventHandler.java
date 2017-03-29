@@ -31,7 +31,6 @@ public class TwitterEventHandler implements Handler<BridgeEvent> {
 
 	@Override
 	public void handle(BridgeEvent bridgeEvent) {
-		System.out.println(bridgeEvent.type() + "   " + bridgeEvent.getRawMessage());
 		switch (bridgeEvent.type()) {
 			case REGISTER:
 				onRegister(bridgeEvent);

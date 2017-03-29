@@ -9,14 +9,14 @@
         font-size: 20pt;
     }
 
+
 </style>
 
 <body>
 
-<div class="news">Latest news:</div>
-<br>
+<h2>Latest Vertx news:</h2>
 
-<div id="status" class="news"></div>
+<div id="news"></div>
 
 <script src="/assets/jquery/jquery.min.js"></script>
 <script src="/assets/sockjs/sockjs.min.js"></script>
@@ -33,12 +33,17 @@
     var eb = new EventBus('/feed');
 
     eb.onopen = function () {
-        eb.registerHandler("feed." + makeUUID(), {query: "vertx"}, function (error, message) {
-            console.log('received a message: ' + JSON.stringify(message));
-            console.log('received an error: ' + JSON.stringify(error));
-        });
+        var lastTime = new Date(0).getTime();
 
+        eb.registerHandler("feed." + makeUUID(), {query: "vertx"}, function (error, message) {
+            if(lastTime < message.body.createdAt) {
+                lastTime = message.body.createdAt;
+                $("#news").prepend("<div>" + JSON.stringify(message) + "</div>");
+                $("#news").prepend("<div>~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div>");
+            }
+        });
     }
+
 </script>
 
 </body>
